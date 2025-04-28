@@ -1,10 +1,9 @@
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
 
-const JWT_SECRET = process.env.JWT_SECRET;
+// Use JWT_SECRET from environment variables (Render.com) or fallback to a default value
+const JWT_SECRET = process.env.JWT_SECRET || 'your_very_strong_and_secret_jwt_key_please_change_me';
 
 module.exports = function(req, res, next) {
-
   const authHeader = req.header('authorization');
   
   if (!authHeader) {

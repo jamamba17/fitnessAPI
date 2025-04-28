@@ -1,9 +1,9 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-require('dotenv').config();
 
-const JWT_SECRET = process.env.JWT_SECRET;
+// Use environment variable if available (for Render.com), or fallback to default
+const JWT_SECRET = process.env.JWT_SECRET || 'your_very_strong_and_secret_jwt_key_please_change_me';
 
 exports.register = async (req, res) => {
   const { email, password } = req.body;
