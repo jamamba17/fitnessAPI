@@ -2,7 +2,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-// Use environment variable if available (for Render.com), or fallback to default
 const JWT_SECRET = process.env.JWT_SECRET || 'your_very_strong_and_secret_jwt_key_please_change_me';
 
 exports.register = async (req, res) => {
@@ -11,14 +10,14 @@ exports.register = async (req, res) => {
   try {
     let user = await User.findOne({ email });
     if (user) {
-      return res.status(400).json({ msg: 'User already exists' });
+      return res.status(400).send({ msg: 'User already exists' });
     }
 
     if (!email || !password) {
-        return res.status(400).json({ msg: 'Please provide email and password' });
+        return res.status(400).send({ msg: 'Please provide email and password' });
     }
     if (password.length < 6) {
-        return res.status(400).json({ msg: 'Password must be at least 6 characters long' });
+        return res.status(400).send({ msg: 'Password must be at least 6 characters long' });
     }
 
     user = new User({
@@ -43,7 +42,7 @@ exports.register = async (req, res) => {
       { expiresIn: 3600 },
       (err, token) => {
         if (err) throw err;
-        res.status(201).json({ token });
+        res.status(201).send({ token });
       }
     );
 
@@ -59,12 +58,12 @@ exports.login = async (req, res) => {
   try {
     let user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ msg: 'Invalid Credentials' });
+      return res.status(400).send({ msg: 'Invalid Credentials' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ msg: 'Invalid Credentials' });
+      return res.status(400).send({ msg: 'Invalid Credentials' });
     }
 
     const payload = {
@@ -79,7 +78,7 @@ exports.login = async (req, res) => {
       { expiresIn: 3600 },
       (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        res.send({ token });
       }
     );
 
@@ -93,9 +92,9 @@ exports.getUser = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
     if (!user) {
-        return res.status(404).json({ msg: 'User not found' });
+        return res.status(404).send({ msg: 'User not found' });
     }
-    res.json(user);
+    res.send(user);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');

@@ -10,17 +10,17 @@ app.use(express.json());
 
 app.get('/', (req, res) => res.send('Fitness Tracker API Running'));
 
-const workoutRoutes = require('./routes/workouts');
-const userRoutes = require('./routes/auth');
+//Routes Middleware
+const workoutRoutes = require("./routes/workout");
+const userRoutes = require("./routes/user");
 
-app.use('/workouts', workoutRoutes);
-app.use('/users', userRoutes);
+app.use("/workouts", workoutRoutes);
+app.use("/users", userRoutes);
 
 if(require.main === module){
-    const PORT = process.env.PORT || 4000;
-    app.listen(PORT, () => {
-        console.log(`API is now online on port ${PORT}`)
+    app.listen(process.env.PORT || 4000, () => {
+        console.log(`API is now online on port ${ process.env.PORT || 4000 }`)
     });
 }
 
-module.exports = {app, mongoose};
+module.exports = {app,mongoose};

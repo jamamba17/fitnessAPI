@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    // Use environment variable if available (for Render.com), or fallback to local URL
     const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/fitnessTracker';
     
     await mongoose.connect(mongoURI);
